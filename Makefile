@@ -1,6 +1,6 @@
 SRC	=	src/main.cpp
 BUILD_DIR = build
-OBJ	=	$(BUILD_DIR)/$(SRC:.cpp=.o)
+OBJ	=	$(SRC:src/%.cpp=$(BUILD_DIR)/%.o)
 
 all:	$(OBJ)
 	g++ -o pbrain-gomoku-ai $(OBJ)
@@ -8,7 +8,7 @@ all:	$(OBJ)
 	cp pbrain-gomoku-ai bin/pbrain-player1.exe
 	cp pbrain-gomoku-ai bin/pbrain-player2.exe
 
-$(BUILD_DIR)/%.o: %.cpp
+$(BUILD_DIR)/%.o: src/%.cpp
 	mkdir -p $(BUILD_DIR)
 	g++ -c $< -o $@
 
