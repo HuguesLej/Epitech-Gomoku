@@ -45,18 +45,18 @@ std::vector<int> GomokuAI::checkRow()
     std::vector<int> vec = {0, 0};
     int count = 0;
 
-    for (auto col : board) {
-        for (auto row : col) {
-            if (col[row] == 1) {
+    for (auto row : board) {
+        for (auto col : row) {
+            if (row[col] == 1) {
                 count++;
             } else {
                 count = 0;
             }
             if (count == 4) {
-                vec[0] = row;
-                vec[1] = &col - &board[0] + 1;
+                vec[0] = col;
+                vec[1] = &row - &board[0] + 1;
                 if (checkLegalMove(vec[0], vec[1])) { return vec; }
-                vec[1] = &col - &board[0] - 5;
+                vec[1] = &row - &board[0] - 5;
                 if (checkLegalMove(vec[0], vec[1])) { return vec; }
             }
         }
@@ -69,18 +69,18 @@ std::vector<int> GomokuAI::checkCol()
     std::vector<int> vec = {0, 0};
     int count = 0;
 
-    for (auto col : board) {
-        for (auto row : col) {
-            if (col[row] == 1) {
+    for (auto row : board) {
+        for (auto col : row) {
+            if (row[col] == 1) {
                 count++;
             } else {
                 count = 0;
             }
             if (count == 4) {
-                vec[0] = row + 1;
-                vec[1] = &col - &board[0];
+                vec[0] = col + 1;
+                vec[1] = &row - &board[0];
                 if (checkLegalMove(vec[0], vec[1])) { return vec; }
-                vec[0] = row - 5;
+                vec[0] = col - 5;
                 if (checkLegalMove(vec[0], vec[1])) { return vec; }
             }
         }
