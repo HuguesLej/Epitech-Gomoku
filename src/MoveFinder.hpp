@@ -34,6 +34,14 @@ class MoveFinder
             ANTI_DIAGONAL = 3
         };
 
+        enum Scores {
+            ONE_IN_A_ROW = 1,
+            TWO_IN_A_ROW = 10,
+            THREE_IN_A_ROW = 100,
+            FOUR_IN_A_ROW = 1000,
+            FIVE_IN_A_ROW = 10000
+        };
+
         std::vector<std::vector<int>> _board;
         int _boardSize;
 

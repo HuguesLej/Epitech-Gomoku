@@ -118,15 +118,15 @@ int MoveFinder::evaluateScore(int pieces_count)
 {
     switch (pieces_count) {
         case 0:
-            return 1;
+            return Scores::ONE_IN_A_ROW;
         case 1:
-            return 10;
+            return Scores::TWO_IN_A_ROW;
         case 2:
-            return 100;
+            return Scores::THREE_IN_A_ROW;
         case 3:
-            return 1000;
+            return Scores::FOUR_IN_A_ROW;
         case 4:
-            return 10000;
+            return Scores::FIVE_IN_A_ROW;
     }
     return 0;
 }
