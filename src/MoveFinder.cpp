@@ -101,6 +101,10 @@ int MoveFinder::evaluateDirection(int x, int y, Direction direction)
             if (_board[x_pos][y_pos] == Piece::PLAYER) {
                 pieces_count++;
             }
+            if (_board[x_pos][y_pos] == Piece::OPPONENT) {
+                pieces_count = 0;
+                break;
+            }
         }
 
         score += evaluateScore(pieces_count);
