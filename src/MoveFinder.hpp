@@ -35,21 +35,28 @@ class MoveFinder
         };
 
         enum Scores {
-            ONE_IN_A_ROW = 1,
-            TWO_IN_A_ROW = 10,
-            THREE_IN_A_ROW = 100,
-            FOUR_IN_A_ROW = 1000,
-            FIVE_IN_A_ROW = 10000
+            PLAYER_ONE_IN_A_ROW = 1,
+            PLAYER_TWO_IN_A_ROW = 10,
+            PLAYER_THREE_IN_A_ROW = 100,
+            PLAYER_FOUR_IN_A_ROW = 1000,
+            PLAYER_FIVE_IN_A_ROW = 10000,
+            OPPONENT_ONE_IN_A_ROW = 0,
+            OPPONENT_TWO_IN_A_ROW = 9,
+            OPPONENT_THREE_IN_A_ROW = 90,
+            OPPONENT_FOUR_IN_A_ROW = 900,
+            OPPONENT_FIVE_IN_A_ROW = 9000
         };
 
         std::vector<std::vector<int>> _board;
         int _boardSize;
+        uint _depth;
 
-        int findMoveScore(int x, int y);
+        int findMoveScore(int x, int y, bool isPlayer);
         std::vector<int> findGreatestScore(std::vector<std::vector<int>> scores);
+        int findOpponentBestNextMove(void);
 
-        int evaluateDirection(int x, int y, Direction direction);
-        int evaluateScore(int pieces_count);
+        int evaluateDirection(int x, int y, Direction direction, bool isPlayer);
+        int evaluateScore(int pieces_count, bool isPlayer);
 
         void getOffset(Direction direction, int &x_offset, int &y_offset);
 

@@ -7,7 +7,7 @@
 
 #include "MoveFinder.hpp"
 
-MoveFinder::MoveFinder(std::vector<std::vector<int>> board, int boardSize) : _board(board), _boardSize(boardSize)
+MoveFinder::MoveFinder(std::vector<std::vector<int>> board, int boardSize) : _board(board), _boardSize(boardSize), _depth(0)
 {
 }
 
@@ -21,36 +21,61 @@ std::vector<int> MoveFinder::findBestMove(void)
             if (_board[x][y] != Piece::EMPTY) {
                 continue;
             }
-            scores[x][y] = findMoveScore(x, y);
+            scores[x][y] = findMoveScore(x, y, true);
+            _board[x][y] = Piece::PLAYER;
+            scores[x][y] -= findOpponentBestNextMove();
+            _board[x][y] = Piece::EMPTY;
         }
     }
     return findGreatestScore(scores);
 }
 
 
-int MoveFinder::findMoveScore(int x, int y)
+int MoveFinder::findOpponentBestNextMove(void)
+{
+    std::vector<std::vector<int>> scores(_boardSize, std::vector<int>(_boardSize, 0));
+
+    for (int x = 0; x < _boardSize; x++) {
+        for (int y = 0; y < _boardSize; y++) {
+            if (_board[x][y] != Piece::EMPTY) {
+                continue;
+            }
+            scores[x][y] = findMoveScore(x, y, false);
+        }
+    }
+
+    std::vector<int> greatest_pos = findGreatestScore(scores);
+
+    return scores[greatest_pos[0]][greatest_pos[1]];
+}
+
+
+int MoveFinder::findMoveScore(int x, int y, bool isPlayer)
 {
     int score = 0;
 
     for (int i = 0; i < 4; i++) {
-        score += evaluateDirection(x, y, static_cast<Direction>(i));
+        score += evaluateDirection(x, y, static_cast<Direction>(i), isPlayer);
     }
 
     return score;
 }
 
 
-#include <iostream>
 std::vector<int> MoveFinder::findGreatestScore(std::vector<std::vector<int>> scores)
 {
-    int greatest = 0;
+    int greatest;
     std::vector<std::vector<int>> greatest_pos;
     std::size_t index;
 
     // Find the greatest score
     for (int x = 0; x < _boardSize; x++) {
         for (int y = 0; y < _boardSize; y++) {
-            if (scores[x][y] > greatest) {
+            if (x == 0 && y == 0) {
+                greatest = scores[x][y];
+                continue;
+            }
+            if (_board[x][y] == Piece::EMPTY && scores[x][y] > greatest) {
                 greatest = scores[x][y];
             }
         }
@@ -65,21 +90,13 @@ std::vector<int> MoveFinder::findGreatestScore(std::vector<std::vector<int>> sco
         }
     }
 
-    std::cout << "DEBUG ============================== Start Debugging ==============================" << std::endl;
-    std::cout << "DEBUG Greatest score: " << greatest << std::endl;
-    for (auto &pos : greatest_pos) {
-        std::cout << "DEBUG (" << pos[0] << "," << pos[1] << ")" << std::endl;
-    }
-
     // Return a random greatest score
     index = rand() % greatest_pos.size();
-    std::cout << "DEBUG Play (" << greatest_pos[index][0] << ", " << greatest_pos[index][1] << ")" << std::endl;
-    std::cout << "DEBUG =============================== End Debugging ===============================" << std::endl;
     return greatest_pos[index];
 }
 
 
-int MoveFinder::evaluateDirection(int x, int y, Direction direction)
+int MoveFinder::evaluateDirection(int x, int y, Direction direction, bool isPlayer)
 {
     int pieces_count = 0;
     int x_offset = 0;
@@ -98,35 +115,35 @@ int MoveFinder::evaluateDirection(int x, int y, Direction direction)
             if (isOutOfBounds(x_pos, y_pos)) {
                 continue;
             }
-            if (_board[x_pos][y_pos] == Piece::PLAYER) {
+            if ((isPlayer && _board[x_pos][y_pos] == Piece::PLAYER) || (!isPlayer && _board[x_pos][y_pos] == Piece::OPPONENT)) {
                 pieces_count++;
             }
-            if (_board[x_pos][y_pos] == Piece::OPPONENT) {
+            if ((isPlayer && _board[x_pos][y_pos] == Piece::OPPONENT) || (!isPlayer && _board[x_pos][y_pos] == Piece::PLAYER)) {
                 pieces_count = 0;
                 break;
             }
         }
 
-        score += evaluateScore(pieces_count);
+        score += evaluateScore(pieces_count, isPlayer);
     }
 
     return score;
 }
 
 
-int MoveFinder::evaluateScore(int pieces_count)
+int MoveFinder::evaluateScore(int pieces_count, bool isPlayer)
 {
     switch (pieces_count) {
         case 0:
-            return Scores::ONE_IN_A_ROW;
+            return isPlayer ? Scores::PLAYER_ONE_IN_A_ROW : Scores::OPPONENT_ONE_IN_A_ROW;
         case 1:
-            return Scores::TWO_IN_A_ROW;
+            return isPlayer ? Scores::PLAYER_TWO_IN_A_ROW : Scores::OPPONENT_TWO_IN_A_ROW;
         case 2:
-            return Scores::THREE_IN_A_ROW;
+            return isPlayer ? Scores::PLAYER_THREE_IN_A_ROW : Scores::OPPONENT_THREE_IN_A_ROW;;
         case 3:
-            return Scores::FOUR_IN_A_ROW;
+            return isPlayer ? Scores::PLAYER_FOUR_IN_A_ROW : Scores::OPPONENT_FOUR_IN_A_ROW;;
         case 4:
-            return Scores::FIVE_IN_A_ROW;
+            return isPlayer ? Scores::PLAYER_FIVE_IN_A_ROW : Scores::OPPONENT_FIVE_IN_A_ROW;;
     }
     return 0;
 }
