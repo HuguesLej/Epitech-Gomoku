@@ -1,9 +1,18 @@
+/*
+** EPITECH PROJECT, 2024
+** B-AIA-500-REN-5-1-gomoku-hugues.lejeune
+** File description:
+** gomokuAI
+*/
+
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <cstdlib>
 #include <ctime>
 #include <vector>
+
+#include "minMax.hpp"
 
 #ifndef GOMOKUAI_HPP
 #define GOMOKUAI_HPP
@@ -31,6 +40,7 @@ private:
     int boardSize;
     bool initialized;
     std::vector <std::vector<int>> board;
+    minMax brain;
 
     /**
      * @brief Handle the start of the game
@@ -76,7 +86,7 @@ private:
      */
     void print_board();
 
-    void makeRandomMove();
+    void makeWellThoughtMove();
 
     /**
      * @brief Play a move on the board

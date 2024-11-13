@@ -11,10 +11,7 @@
 //                     constructor                 //
 //-------------------------------------------------//
 
-GomokuAI::GomokuAI() : initialized(false) {
-    std::srand(static_cast<unsigned>(std::time(0))); // Seed for random moves
-}
-
+GomokuAI::GomokuAI() : initialized(false) {}
 
 //-------------------------------------------------//
 //                        main                     //
@@ -158,7 +155,7 @@ void GomokuAI::makeMove() {
         return;
     } catch (std::runtime_error &e) {}
 
-    makeRandomMove();
+    makeWellThoughtMove();
 }
 
 //-------------------------------------------------//
@@ -238,13 +235,9 @@ void GomokuAI::handleAbout() {
 //-------------------------------------------------//
 
 
-void GomokuAI::makeRandomMove() {
-    int x = -1;
-    int y = -1;
-    while (play_move(x, y) != 0) {
-        x = std::rand() % boardSize;
-        y = std::rand() % boardSize;
-    }
+void GomokuAI::makeWellThoughtMove() {
+    std::pair<int, int> move = brain.findBestMove(board, 1);
+    play_move(move.first, move.second);
 }
 
 void GomokuAI::registerMoveOnBoard(int x, int y, int player) {
