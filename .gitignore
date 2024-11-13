@@ -3,3 +3,6 @@ bin/
 test/
 pbrain-gomoku-ai
 .vscode/
+*.log
+*.ini
+liskvork*
