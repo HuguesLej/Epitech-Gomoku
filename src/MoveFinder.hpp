@@ -41,8 +41,11 @@ class MoveFinder
         std::vector<int> findGreatestScore(std::vector<std::vector<int>> scores);
 
         int evaluateDirection(int x, int y, Direction direction);
+        int evaluateScore(int pieces_count);
 
         void getOffset(Direction direction, int &x_offset, int &y_offset);
+
+        bool isOutOfBounds(int x, int y);
 };
 
 #endif /* !MOVEFINDER_HPP_ */

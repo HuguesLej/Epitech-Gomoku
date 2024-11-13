@@ -30,7 +30,7 @@ std::vector<int> MoveFinder::findBestMove(void)
 
 int MoveFinder::findMoveScore(int x, int y)
 {
-    int score = 1;
+    int score = 0;
 
     for (int i = 0; i < 4; i++) {
         score += evaluateDirection(x, y, static_cast<Direction>(i));
@@ -40,6 +40,7 @@ int MoveFinder::findMoveScore(int x, int y)
 }
 
 
+#include <iostream>
 std::vector<int> MoveFinder::findGreatestScore(std::vector<std::vector<int>> scores)
 {
     int greatest = 0;
@@ -64,32 +65,66 @@ std::vector<int> MoveFinder::findGreatestScore(std::vector<std::vector<int>> sco
         }
     }
 
+    std::cout << "DEBUG ============================== Start Debugging ==============================" << std::endl;
+    std::cout << "DEBUG Greatest score: " << greatest << std::endl;
+    for (auto &pos : greatest_pos) {
+        std::cout << "DEBUG (" << pos[0] << "," << pos[1] << ")" << std::endl;
+    }
+
     // Return a random greatest score
     index = rand() % greatest_pos.size();
+    std::cout << "DEBUG Play (" << greatest_pos[index][0] << ", " << greatest_pos[index][1] << ")" << std::endl;
+    std::cout << "DEBUG =============================== End Debugging ===============================" << std::endl;
     return greatest_pos[index];
 }
 
 
 int MoveFinder::evaluateDirection(int x, int y, Direction direction)
 {
-    int score = 0;
+    int pieces_count = 0;
     int x_offset = 0;
     int y_offset = 0;
+    int score = 0;
 
     getOffset(direction, x_offset, y_offset);
 
-    for (int i = 1; i < 5; i++) {
-        if (x + i * x_offset >= _boardSize || y + i * y_offset >= _boardSize) {
-            break;
+    for (int i = -4; i < 1; i++) {
+        pieces_count = 0;
+
+        for (int j = i; j < i + 5; j++) {
+            int x_pos = x + j * x_offset;
+            int y_pos = y + j * y_offset;
+
+            if (isOutOfBounds(x_pos, y_pos)) {
+                continue;
+            }
+            if (_board[x_pos][y_pos] == Piece::PLAYER) {
+                pieces_count++;
+            }
         }
-        if (_board[x + i * x_offset][y + i * y_offset] == Piece::PLAYER) {
-            score++;
-        } else {
-            break;
-        }
+
+        score += evaluateScore(pieces_count);
     }
 
     return score;
+}
+
+
+int MoveFinder::evaluateScore(int pieces_count)
+{
+    switch (pieces_count) {
+        case 0:
+            return 1;
+        case 1:
+            return 10;
+        case 2:
+            return 100;
+        case 3:
+            return 1000;
+        case 4:
+            return 10000;
+    }
+    return 0;
 }
 
 
@@ -111,4 +146,10 @@ void MoveFinder::getOffset(Direction direction, int &x_offset, int &y_offset)
             y_offset = -1;
             break;
     }
+}
+
+
+bool MoveFinder::isOutOfBounds(int x, int y)
+{
+    return x < 0 || x >= _boardSize || y < 0 || y >= _boardSize;
 }
