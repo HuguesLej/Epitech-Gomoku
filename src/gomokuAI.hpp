@@ -86,7 +86,7 @@ private:
      */
     void print_board();
 
-    void makeMove();
+    void makeWellThoughtMove();
 
     /**
      * @brief Play a move on the board
