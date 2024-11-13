@@ -6,6 +6,8 @@ OBJ	=	$(SRC:src/%.cpp=$(BUILD_DIR)/%.o)
 
 all:	$(OBJ)
 	g++ -o pbrain-gomoku-ai $(OBJ)
+
+bin: all
 	mkdir -p bin
 	cp pbrain-gomoku-ai bin/pbrain-player1.exe
 	cp pbrain-gomoku-ai bin/pbrain-player2.exe

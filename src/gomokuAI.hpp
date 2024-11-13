@@ -30,6 +30,12 @@ public:
      */
     void processCommand(const std::string &command);
 
+    void makeMove();
+    std::vector<int> checkRow();
+    std::vector<int> checkCol();
+    std::vector<int> checkDiagonals();
+    bool checkLegalMove(int x, int y);
+
 private:
     int boardSize;
     bool initialized;
