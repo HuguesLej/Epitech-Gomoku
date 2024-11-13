@@ -40,124 +40,51 @@ void GomokuAI::processCommand(const std::string &command) {
     }
 }
 
-std::vector<int> GomokuAI::checkRow()
-{
-    std::vector<int> vec = {0, 0};
-    int count = 0;
-
-    for (auto row : board) {
-        for (auto col : row) {
-            if (row[col] == 1) {
-                count++;
-            } else {
-                count = 0;
+bool GomokuAI::checkPatternInDirection(int row, int col, int dRow, int dCol) {
+    for (const auto& pattern : patterns) {
+        bool match = true;
+        for (int i = 0; i < pattern.size(); ++i) {
+            int newRow = row + i * dRow;
+            int newCol = col + i * dCol;
+            if (newRow < 0 || newRow >= boardSize || newCol < 0 || newCol >= boardSize) {
+                match = false;
+                break;
             }
-            if (count == 4) {
-                vec[0] = col;
-                vec[1] = &row - &board[0] + 1;
-                if (checkLegalMove(vec[0], vec[1])) { return vec; }
-                vec[1] = &row - &board[0] - 5;
-                if (checkLegalMove(vec[0], vec[1])) { return vec; }
+            if (pattern[i] == 1 && board[newRow][newCol] != 1) {
+                match = false;
+                break;
+            } else if (pattern[i] == 0 && board[newRow][newCol] != 0) {
+                match = false;
+                break;
             }
         }
+        if (match) return true;
     }
-    throw std::runtime_error("No win move found");
-}
+    return false;
+};
 
-std::vector<int> GomokuAI::checkCol()
-{
-    std::vector<int> vec = {0, 0};
-    int count = 0;
+bool GomokuAI::immediateWin() {
 
-    for (auto row : board) {
-        for (auto col : row) {
-            if (row[col] == 1) {
-                count++;
-            } else {
-                count = 0;
-            }
-            if (count == 4) {
-                vec[0] = col + 1;
-                vec[1] = &row - &board[0];
-                if (checkLegalMove(vec[0], vec[1])) { return vec; }
-                vec[0] = col - 5;
-                if (checkLegalMove(vec[0], vec[1])) { return vec; }
-            }
-        }
-    }
-    throw std::runtime_error("No win move found");
-}
-
-std::vector<int> GomokuAI::checkDiagonals()
-{
-    std::vector vec2 = {0, 0};
-
-    for (int i = 0; i < boardSize - 4; ++i) {
-        for (int j = 0; j < boardSize - 4; ++j) {
-            int count = 0;
-            for (int k = 0; k < 5; ++k) {
-                if (board[i + k][j + k] == 1) {
-                    count++;
-                } else {
-                    count = 0;
-                    break;
-                }
-                if (count == 4) {
-                    vec2[0] = i + k + 1;
-                    vec2[1] = j + k + 1;
-                    if (checkLegalMove(vec2[0], vec2[1])) { return vec2; }
-                    vec2[0] = i + k - 4;
-                    vec2[1] = j + k - 4;
-                    if (checkLegalMove(vec2[0], vec2[1])) { return vec2; }
+    for (int row = 0; row < boardSize; ++row) {
+        for (int col = 0; col < boardSize; ++col) {
+            if (board[row][col] == 1) {
+                if (checkPatternInDirection(row, col, 0, 1) ||
+                    checkPatternInDirection(row, col, 1, 0) ||
+                    checkPatternInDirection(row, col, 1, 1) ||
+                    checkPatternInDirection(row, col, 1, -1)) {
+                    return true;
                 }
             }
         }
     }
-
-    for (int i = 4; i < boardSize; ++i) {
-        for (int j = 0; j < boardSize - 4; ++j) {
-            int count = 0;
-            for (int k = 0; k < 5; ++k) {
-                if (board[i - k][j + k] == 1) {
-                    count++;
-                } else {
-                    count = 0;
-                    break;
-                }
-                if (count == 4) {
-                    vec2[0] = i - k - 1;
-                    vec2[1] = j + k + 1;
-                    if (checkLegalMove(vec2[0], vec2[1])) { return vec2; }
-                    vec2[0] = i - k + 4;
-                    vec2[1] = j + k - 4;
-                    if (checkLegalMove(vec2[0], vec2[1])) { return vec2; }
-                }
-            }
-        }
-    }
-    throw std::runtime_error("No win move found");
-}
-
+    return false;
+};
 
 void GomokuAI::makeMove() {
-    std::vector vec2 = {0, 0};
 
-    try {
-        vec2 = checkRow();
-        play_move(vec2[0], vec2[1]);
+    if (immediateWin()) {
         return;
-    } catch (std::runtime_error &e) {}
-    try {
-        vec2 = checkCol();
-        play_move(vec2[0], vec2[1]);
-        return;
-    } catch (std::runtime_error &e) {}
-    try {
-        vec2 = checkDiagonals();
-        play_move(vec2[0], vec2[1]);
-        return;
-    } catch (std::runtime_error &e) {}
-
+    }
     makeRandomMove();
 }
 

@@ -22,10 +22,17 @@ public:
     void processCommand(const std::string &command);
 
     void makeMove();
-    std::vector<int> checkRow();
-    std::vector<int> checkCol();
-    std::vector<int> checkDiagonals();
+    bool immediateWin();
+    bool checkPatternInDirection(int row, int col, int dRow, int dCol);
     bool checkLegalMove(int x, int y);
+
+    const std::vector<std::vector<int>> patterns = {
+        {1, 1, 1, 1, 0},
+        {0, 1, 1, 1, 1},
+        {1, 1, 0, 1, 1},
+        {1, 0, 1, 1, 1},
+        {1, 1, 1, 0, 1}
+    };
 
 private:
     int boardSize;
