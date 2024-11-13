@@ -72,7 +72,7 @@ void GomokuAI::handleTurn(std::istringstream &stream) {
     stream >> x >> comma >> y;
 
     board[x][y] = 2; // Opponent move
-    makeRandomMove(); // AI move
+    makeMove(); // AI move
 }
 
 void GomokuAI::handleBoard() {
@@ -89,7 +89,7 @@ void GomokuAI::handleBoard() {
 
         board[x][y] = player;
     }
-    makeRandomMove();
+    makeMove();
 }
 
 void GomokuAI::handleEnd() {
@@ -117,13 +117,9 @@ void GomokuAI::handleAbout() {
 //-------------------------------------------------//
 
 
-void GomokuAI::makeRandomMove() {
-    int x = -1;
-    int y = -1;
-    while (play_move(x, y) != 0) {
-        x = std::rand() % boardSize;
-        y = std::rand() % boardSize;
-    }
+void GomokuAI::makeMove() {
+    std::pair<int, int> move = brain.findBestMove(board, 1);
+    play_move(move.first, move.second);
 }
 
 void GomokuAI::registerMoveOnBoard(int x, int y, int player) {
