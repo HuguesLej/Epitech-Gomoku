@@ -52,7 +52,7 @@ class MoveFinder
         uint _depth;
 
         int findMoveScore(int x, int y, bool isPlayer);
-        std::vector<int> findGreatestScore(std::vector<std::vector<int>> scores);
+        std::pair<int, std::vector<int>> findGreatestScore(std::vector<std::pair<int, std::vector<int>>> &scores);
         int findOpponentBestNextMove(void);
 
         int evaluateDirection(int x, int y, Direction direction, bool isPlayer);

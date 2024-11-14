@@ -14,39 +14,49 @@ MoveFinder::MoveFinder(std::vector<std::vector<int>> board, int boardSize) : _bo
 
 std::vector<int> MoveFinder::findBestMove(void)
 {
-    std::vector<std::vector<int>> scores(_boardSize, std::vector<int>(_boardSize, 0));
+    std::vector<std::pair<int, std::vector<int>>> scores;
 
     for (int x = 0; x < _boardSize; x++) {
         for (int y = 0; y < _boardSize; y++) {
             if (_board[x][y] != Piece::EMPTY) {
                 continue;
             }
-            scores[x][y] = findMoveScore(x, y, true);
+
+            int score = findMoveScore(x, y, true);
+
             _board[x][y] = Piece::PLAYER;
-            scores[x][y] -= findOpponentBestNextMove();
+            score -= findOpponentBestNextMove();
             _board[x][y] = Piece::EMPTY;
+
+            scores.push_back({score, {x, y}});
         }
     }
-    return findGreatestScore(scores);
+
+    std::pair<int, std::vector<int>> greatest = findGreatestScore(scores);
+
+    return greatest.second;
 }
 
 
 int MoveFinder::findOpponentBestNextMove(void)
 {
-    std::vector<std::vector<int>> scores(_boardSize, std::vector<int>(_boardSize, 0));
+    std::vector<std::pair<int, std::vector<int>>> scores;
 
     for (int x = 0; x < _boardSize; x++) {
         for (int y = 0; y < _boardSize; y++) {
             if (_board[x][y] != Piece::EMPTY) {
                 continue;
             }
-            scores[x][y] = findMoveScore(x, y, false);
+
+            int score = findMoveScore(x, y, false);
+
+            scores.push_back({score, {x, y}});
         }
     }
 
-    std::vector<int> greatest_pos = findGreatestScore(scores);
+    std::pair<int, std::vector<int>> greatest = findGreatestScore(scores);
 
-    return scores[greatest_pos[0]][greatest_pos[1]];
+    return greatest.first;
 }
 
 
@@ -62,31 +72,23 @@ int MoveFinder::findMoveScore(int x, int y, bool isPlayer)
 }
 
 
-std::vector<int> MoveFinder::findGreatestScore(std::vector<std::vector<int>> scores)
+std::pair<int, std::vector<int>> MoveFinder::findGreatestScore(std::vector<std::pair<int, std::vector<int>>> &scores)
 {
-    int greatest;
-    std::vector<std::vector<int>> greatest_pos;
+    int greatest = scores[0].first;
+    std::vector<std::pair<int, std::vector<int>>> greatest_pos;
     std::size_t index;
 
     // Find the greatest score
-    for (int x = 0; x < _boardSize; x++) {
-        for (int y = 0; y < _boardSize; y++) {
-            if (x == 0 && y == 0) {
-                greatest = scores[x][y];
-                continue;
-            }
-            if (_board[x][y] == Piece::EMPTY && scores[x][y] > greatest) {
-                greatest = scores[x][y];
-            }
+    for (auto &score : scores) {
+        if (score.first > greatest) {
+            greatest = score.first;
         }
     }
 
     // Put all the greatest scores in a vector
-    for (int x = 0; x < _boardSize; x++) {
-        for (int y = 0; y < _boardSize; y++) {
-            if (scores[x][y] == greatest) {
-                greatest_pos.push_back({x, y});
-            }
+    for (auto &score : scores) {
+        if (score.first == greatest) {
+            greatest_pos.push_back(score);
         }
     }
 
