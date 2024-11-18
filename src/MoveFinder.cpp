@@ -7,25 +7,46 @@
 
 #include "MoveFinder.hpp"
 
-MoveFinder::MoveFinder(std::vector<std::vector<int>> board, int boardSize) : _board(board), _boardSize(boardSize), _depth(0)
+MoveFinder::MoveFinder(std::vector<std::vector<int>> board, int boardSize) : _board(board), _boardSize(boardSize)
 {
 }
 
 
 std::vector<int> MoveFinder::findBestMove(void)
 {
+    int depth = 2;
+    std::pair<int, std::vector<int>> best_move = evaluateScores(depth, true);
+
+    return best_move.second;
+}
+
+
+std::pair<int, std::vector<int>> MoveFinder::evaluateScores(int depth, bool isPlayer)
+{
+    if (depth <= 0) {
+        return {0, {0, 0}};
+    }
+
     std::vector<std::pair<int, std::vector<int>>> scores;
 
     for (int x = 0; x < _boardSize; x++) {
         for (int y = 0; y < _boardSize; y++) {
+
             if (_board[x][y] != Piece::EMPTY) {
                 continue;
             }
 
-            int score = findMoveScore(x, y, true);
+            int score = findMoveScore(x, y, isPlayer);
 
-            _board[x][y] = Piece::PLAYER;
-            score -= findOpponentBestNextMove();
+            if (score >= Scores::PLAYER_FIVE_IN_A_ROW || score >= Scores::OPPONENT_FIVE_IN_A_ROW) {
+                return {score, {x, y}};
+            }
+
+            _board[x][y] = isPlayer ? Piece::PLAYER : Piece::OPPONENT;
+
+            std::pair<int, std::vector<int>> sco = evaluateScores(depth - 1, !isPlayer);
+            score -= sco.first;
+
             _board[x][y] = Piece::EMPTY;
 
             scores.push_back({score, {x, y}});
@@ -34,29 +55,7 @@ std::vector<int> MoveFinder::findBestMove(void)
 
     std::pair<int, std::vector<int>> greatest = findGreatestScore(scores);
 
-    return greatest.second;
-}
-
-
-int MoveFinder::findOpponentBestNextMove(void)
-{
-    std::vector<std::pair<int, std::vector<int>>> scores;
-
-    for (int x = 0; x < _boardSize; x++) {
-        for (int y = 0; y < _boardSize; y++) {
-            if (_board[x][y] != Piece::EMPTY) {
-                continue;
-            }
-
-            int score = findMoveScore(x, y, false);
-
-            scores.push_back({score, {x, y}});
-        }
-    }
-
-    std::pair<int, std::vector<int>> greatest = findGreatestScore(scores);
-
-    return greatest.first;
+    return greatest;
 }
 
 
