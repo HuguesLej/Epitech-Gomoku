@@ -15,13 +15,13 @@ MoveFinder::MoveFinder(std::vector<std::vector<int>> board, int boardSize) : _bo
 std::vector<int> MoveFinder::findBestMove(void)
 {
     int depth = 2;
-    std::pair<int, std::vector<int>> best_move = evaluateScores(depth, true);
+    std::pair<int, std::vector<int>> best_move = evaluateBoard(depth, true);
 
     return best_move.second;
 }
 
 
-std::pair<int, std::vector<int>> MoveFinder::evaluateScores(int depth, bool isPlayer)
+std::pair<int, std::vector<int>> MoveFinder::evaluateBoard(int depth, bool isPlayer)
 {
     if (depth <= 0) {
         return {0, {0, 0}};
@@ -44,7 +44,7 @@ std::pair<int, std::vector<int>> MoveFinder::evaluateScores(int depth, bool isPl
 
             _board[x][y] = isPlayer ? Piece::PLAYER : Piece::OPPONENT;
 
-            std::pair<int, std::vector<int>> sco = evaluateScores(depth - 1, !isPlayer);
+            std::pair<int, std::vector<int>> sco = evaluateBoard(depth - 1, !isPlayer);
             score -= sco.first;
 
             _board[x][y] = Piece::EMPTY;
@@ -79,16 +79,17 @@ std::pair<int, std::vector<int>> MoveFinder::findGreatestScore(std::vector<std::
 
     // Find the greatest score
     for (auto &score : scores) {
-        if (score.first > greatest) {
-            greatest = score.first;
-        }
-    }
 
-    // Put all the greatest scores in a vector
-    for (auto &score : scores) {
         if (score.first == greatest) {
             greatest_pos.push_back(score);
         }
+
+        if (score.first > greatest) {
+            greatest = score.first;
+            greatest_pos.clear();
+            greatest_pos.push_back(score);
+        }
+
     }
 
     // Return a random greatest score

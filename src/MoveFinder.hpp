@@ -53,7 +53,7 @@ class MoveFinder
         int findMoveScore(int x, int y, bool isPlayer);
         std::pair<int, std::vector<int>> findGreatestScore(std::vector<std::pair<int, std::vector<int>>> &scores);
 
-        std::pair<int, std::vector<int>> evaluateScores(int depth, bool isPlayer);
+        std::pair<int, std::vector<int>> evaluateBoard(int depth, bool isPlayer);
 
         int evaluateDirection(int x, int y, Direction direction, bool isPlayer);
         int evaluateScore(int pieces_count, bool isPlayer);
