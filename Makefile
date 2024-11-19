@@ -1,6 +1,6 @@
 SRC	=	src/main.cpp		\
 		src/gomokuAI.cpp	\
-		src/minMax.cpp
+		src/MoveFinder.cpp
 BUILD_DIR = build
 OBJ	=	$(SRC:src/%.cpp=$(BUILD_DIR)/%.o)
 

@@ -155,7 +155,7 @@ void GomokuAI::makeMove() {
         return;
     } catch (std::runtime_error &e) {}
 
-    makeWellThoughtMove();
+    // makeWellThoughtMove();
     // try {
     //     vec2 = checkRow();
     //     play_move(vec2[0], vec2[1]);
@@ -178,10 +178,10 @@ void GomokuAI::makeMove() {
     //     (void) e;
     // }
 
-    //MoveFinder finder(this->board, this->boardSize);
+    MoveFinder finder(this->board, this->boardSize);
 
-    //vec2 = finder.findBestMove();
-    //play_move(vec2[0], vec2[1]);
+    vec2 = finder.findBestMove();
+    play_move(vec2[0], vec2[1]);
 }
 
 //-------------------------------------------------//
@@ -227,7 +227,7 @@ void GomokuAI::handleBoard() {
     int x, y, player;
     char comma;
 
-    while (std::getline(std::cin, line) && line != "DONE") {
+    while (std::getline(std::cin, line) && line.find("DONE") != std::string::npos) {
         std::istringstream lineStream(line);
         lineStream >> x >> comma >> y >> comma >> player;
 
