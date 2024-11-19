@@ -139,23 +139,6 @@ std::vector<int> GomokuAI::checkDiagonals()
 void GomokuAI::makeMove() {
     std::vector vec2 = {0, 0};
 
-    try {
-        vec2 = checkRow();
-        play_move(vec2[0], vec2[1]);
-        return;
-    } catch (std::runtime_error &e) {}
-    try {
-        vec2 = checkCol();
-        play_move(vec2[0], vec2[1]);
-        return;
-    } catch (std::runtime_error &e) {}
-    try {
-        vec2 = checkDiagonals();
-        play_move(vec2[0], vec2[1]);
-        return;
-    } catch (std::runtime_error &e) {}
-
-    // makeWellThoughtMove();
     // try {
     //     vec2 = checkRow();
     //     play_move(vec2[0], vec2[1]);
@@ -227,12 +210,13 @@ void GomokuAI::handleBoard() {
     int x, y, player;
     char comma;
 
-    while (std::getline(std::cin, line) && line.find("DONE") != std::string::npos) {
+    while (std::getline(std::cin, line) && line != "DONE\r") {
         std::istringstream lineStream(line);
         lineStream >> x >> comma >> y >> comma >> player;
 
         board[x][y] = player;
     }
+    // print_board();
     makeMove();
 }
 
@@ -245,9 +229,9 @@ void GomokuAI::handleEnd() {
 void GomokuAI::print_board() {
     for (auto &j : board) {
         for (int i : j) {
-            std::cout << i;
+            std::cerr << i;
         }
-        std::cout << std::endl;
+        std::cerr << std::endl;
     }
 }
 
