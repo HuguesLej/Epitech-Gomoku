@@ -11,10 +11,7 @@
 //                     constructor                 //
 //-------------------------------------------------//
 
-GomokuAI::GomokuAI() : initialized(false) {
-    std::srand(static_cast<unsigned>(std::time(0))); // Seed for random moves
-}
-
+GomokuAI::GomokuAI() : initialized(false) {}
 
 //-------------------------------------------------//
 //                        main                     //
@@ -82,10 +79,32 @@ bool GomokuAI::immediateWin() {
 
 void GomokuAI::makeMove() {
 
-    if (immediateWin()) {
-        return;
-    }
-    makeRandomMove();
+    // try {
+    //     vec2 = checkRow();
+    //     play_move(vec2[0], vec2[1]);
+    //     return;
+    // } catch (std::runtime_error &e) {
+    //     (void) e;
+    // }
+    // try {
+    //     vec2 = checkCol();
+    //     play_move(vec2[0], vec2[1]);
+    //     return;
+    // } catch (std::runtime_error &e) {
+    //     (void) e;
+    // }
+    // try {
+    //     vec2 = checkDiagonals();
+    //     play_move(vec2[0], vec2[1]);
+    //     return;
+    // } catch (std::runtime_error &e) {
+    //     (void) e;
+    // }
+
+    MoveFinder finder(this->board, this->boardSize);
+
+    vec2 = finder.findBestMove();
+    play_move(vec2[0], vec2[1]);
 }
 
 //-------------------------------------------------//
@@ -164,15 +183,6 @@ void GomokuAI::handleAbout() {
 //                     helpers                     //
 //-------------------------------------------------//
 
-
-void GomokuAI::makeRandomMove() {
-    int x = -1;
-    int y = -1;
-    while (play_move(x, y) != 0) {
-        x = std::rand() % boardSize;
-        y = std::rand() % boardSize;
-    }
-}
 
 void GomokuAI::registerMoveOnBoard(int x, int y, int player) {
     board[x][y] = player;
