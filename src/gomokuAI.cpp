@@ -156,6 +156,32 @@ void GomokuAI::makeMove() {
     } catch (std::runtime_error &e) {}
 
     makeWellThoughtMove();
+    // try {
+    //     vec2 = checkRow();
+    //     play_move(vec2[0], vec2[1]);
+    //     return;
+    // } catch (std::runtime_error &e) {
+    //     (void) e;
+    // }
+    // try {
+    //     vec2 = checkCol();
+    //     play_move(vec2[0], vec2[1]);
+    //     return;
+    // } catch (std::runtime_error &e) {
+    //     (void) e;
+    // }
+    // try {
+    //     vec2 = checkDiagonals();
+    //     play_move(vec2[0], vec2[1]);
+    //     return;
+    // } catch (std::runtime_error &e) {
+    //     (void) e;
+    // }
+
+    //MoveFinder finder(this->board, this->boardSize);
+
+    //vec2 = finder.findBestMove();
+    //play_move(vec2[0], vec2[1]);
 }
 
 //-------------------------------------------------//
