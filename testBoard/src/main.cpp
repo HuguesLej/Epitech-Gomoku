@@ -113,15 +113,12 @@ bool handleOutput(char* buffer, ssize_t bytesRead, int aiOutput, std::pair<int, 
     }
     buffer[bytesRead] = '\0';
     std::string output(buffer);
-
     std::istringstream iss(output);
-
-    std::cout << "Got: " << output << std::endl;
     int x, y;
     char comma;
     iss >> x >> comma >> y;
 
-    if (debug) std::cout << "got : (" << x << ", " << y << ")" << std::endl;
+    if (debug) std::cout << "Got : " << x << ", " << y << std::endl;
     return (x == expectedMove.first && y == expectedMove.second);
 }
 
