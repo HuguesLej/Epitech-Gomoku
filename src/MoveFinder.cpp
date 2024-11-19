@@ -14,7 +14,8 @@ MoveFinder::MoveFinder(std::vector<std::vector<int>> board, int boardSize) : _bo
 
 std::vector<int> MoveFinder::findBestMove(void)
 {
-    int depth = 2;
+    // int depth = 2;
+    int depth = 1;
     std::pair<int, std::vector<int>> best_move = evaluateBoard(depth, true);
 
     return best_move.second;
