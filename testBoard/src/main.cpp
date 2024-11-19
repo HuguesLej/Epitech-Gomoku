@@ -51,10 +51,10 @@ class Board {
                 std::getline(iss, line);
                 for (int j = 0; j < size; j++) {
                     if (line[j] == '1') {
-                        moveP1.push_back(std::pair(i + 1, j + 1));
+                        moveP1.push_back(std::pair(i, j));
                         board[i][j] = 1;
                     } else if (line[j] == '2') {
-                        moveP2.push_back(std::pair(i + 1, j + 1));
+                        moveP2.push_back(std::pair(i, j));
                         board[i][j] = 2;
                     } else {
                         board[i][j] = 0;
@@ -137,10 +137,11 @@ bool testIa(int aiInput, int aiOutput, std::string file) {
     Board board;
 
     board.parseFile("boards/" + file);
+    std::string boardCommand = board.getBoardCommand();
     if (debug) {
         std::cout << "-----------------------------------------" << std::endl;
         std::cout << "TESTING FILE: " << file << std::endl;
-        std::cout << board.getBoardCommand() <<  std::endl;
+        std::cout << boardCommand <<  std::endl;
         // std::cout << "Size: " << board.size << std::endl;
         // board.printBoard();
         std::cout << "Expected move: " << board.expectedMove.first << "," << board.expectedMove.second << std::endl;
@@ -160,7 +161,6 @@ bool testIa(int aiInput, int aiOutput, std::string file) {
         buffer[bytesRead] = '\0';
         std::string output(buffer);
         if (output.find("OK") != std::string::npos) {
-            std::string boardCommand = board.getBoardCommand();
             write(aiInput, boardCommand.c_str(), boardCommand.size());
         }
     }
