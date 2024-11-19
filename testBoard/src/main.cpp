@@ -100,7 +100,7 @@ class Board {
                 boardString += std::to_string(move2.first) + "," + std::to_string(move2.second) + ",2\n";
             }
 
-            boardString += "DONE\r\n";
+            boardString += "DONE\n";
             return boardString;
         }
 };

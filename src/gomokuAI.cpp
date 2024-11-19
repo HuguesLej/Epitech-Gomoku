@@ -210,7 +210,7 @@ void GomokuAI::handleBoard() {
     int x, y, player;
     char comma;
 
-    while (std::getline(std::cin, line) && (line != "DONE\r" && line != "DONE")) {
+    while (std::getline(std::cin, line) && line.find("DONE") == std::string::npos) {
         std::istringstream lineStream(line);
         lineStream >> x >> comma >> y >> comma >> player;
 
