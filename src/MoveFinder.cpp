@@ -27,7 +27,7 @@ std::pair<int, std::vector<int>> MoveFinder::evaluateBoard(int depth, bool isPla
         return {0, {0, 0}};
     }
 
-    int greatest_score = INT32_MIN;
+    int greatest_score = std::numeric_limits<int>::min();
     std::vector<std::vector<int>> greatest_pos;
 
     for (int x = 0; x < _boardSize; x++) {

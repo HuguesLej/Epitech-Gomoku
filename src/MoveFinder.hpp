@@ -8,6 +8,7 @@
 #ifndef MOVEFINDER_HPP_
 #define MOVEFINDER_HPP_
 
+#include <limits>
 #include <stdexcept>
 #include <vector>
 
