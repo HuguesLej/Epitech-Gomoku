@@ -51,10 +51,10 @@ class Board {
                 std::getline(iss, line);
                 for (int j = 0; j < size; j++) {
                     if (line[j] == '1') {
-                        moveP1.push_back(std::pair(i, j));
+                        moveP1.push_back(std::pair(i + 1, j + 1));
                         board[i][j] = 1;
                     } else if (line[j] == '2') {
-                        moveP2.push_back(std::pair(i, j));
+                        moveP2.push_back(std::pair(i + 1, j + 1));
                         board[i][j] = 2;
                     } else {
                         board[i][j] = 0;
@@ -115,8 +115,11 @@ bool handleOutput(char* buffer, ssize_t bytesRead, int aiOutput, std::pair<int, 
     std::string output(buffer);
 
     std::istringstream iss(output);
+
+    std::cout << "Got: " << output << std::endl;
     int x, y;
-    iss >> x >> y;
+    char comma;
+    iss >> x >> comma >> y;
 
     if (debug) std::cout << "got : (" << x << ", " << y << ")" << std::endl;
     return (x == expectedMove.first && y == expectedMove.second);
