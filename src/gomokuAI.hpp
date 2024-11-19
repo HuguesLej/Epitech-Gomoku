@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <vector>
+#include "MoveFinder.hpp"
 
 #ifndef GOMOKUAI_HPP
 #define GOMOKUAI_HPP
