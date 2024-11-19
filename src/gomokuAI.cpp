@@ -139,23 +139,32 @@ std::vector<int> GomokuAI::checkDiagonals()
 void GomokuAI::makeMove() {
     std::vector vec2 = {0, 0};
 
-    try {
-        vec2 = checkRow();
-        play_move(vec2[0], vec2[1]);
-        return;
-    } catch (std::runtime_error &e) {}
-    try {
-        vec2 = checkCol();
-        play_move(vec2[0], vec2[1]);
-        return;
-    } catch (std::runtime_error &e) {}
-    try {
-        vec2 = checkDiagonals();
-        play_move(vec2[0], vec2[1]);
-        return;
-    } catch (std::runtime_error &e) {}
+    // try {
+    //     vec2 = checkRow();
+    //     play_move(vec2[0], vec2[1]);
+    //     return;
+    // } catch (std::runtime_error &e) {
+    //     (void) e;
+    // }
+    // try {
+    //     vec2 = checkCol();
+    //     play_move(vec2[0], vec2[1]);
+    //     return;
+    // } catch (std::runtime_error &e) {
+    //     (void) e;
+    // }
+    // try {
+    //     vec2 = checkDiagonals();
+    //     play_move(vec2[0], vec2[1]);
+    //     return;
+    // } catch (std::runtime_error &e) {
+    //     (void) e;
+    // }
 
-    makeWellThoughtMove();
+    MoveFinder finder(this->board, this->boardSize);
+
+    vec2 = finder.findBestMove();
+    play_move(vec2[0], vec2[1]);
 }
 
 //-------------------------------------------------//
@@ -234,11 +243,6 @@ void GomokuAI::handleAbout() {
 //                     helpers                     //
 //-------------------------------------------------//
 
-
-void GomokuAI::makeWellThoughtMove() {
-    std::pair<int, int> move = brain.findBestMove(board, 1);
-    play_move(move.first, move.second);
-}
 
 void GomokuAI::registerMoveOnBoard(int x, int y, int player) {
     board[x][y] = player;

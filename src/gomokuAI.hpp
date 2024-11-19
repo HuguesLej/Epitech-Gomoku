@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <vector>
+#include "MoveFinder.hpp"
 
 #include "minMax.hpp"
 
