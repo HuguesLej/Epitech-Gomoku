@@ -13,7 +13,7 @@
 #include <vector>
 #include "MoveFinder.hpp"
 
-#include "minMax.hpp"
+// #include "minMax.hpp"
 
 #ifndef GOMOKUAI_HPP
 #define GOMOKUAI_HPP
@@ -41,7 +41,7 @@ private:
     int boardSize;
     bool initialized;
     std::vector <std::vector<int>> board;
-    minMax brain;
+    // minMax brain;
 
     /**
      * @brief Handle the start of the game

@@ -261,10 +261,10 @@ void GomokuAI::handleAbout() {
 //-------------------------------------------------//
 
 
-void GomokuAI::makeWellThoughtMove() {
-    std::pair<int, int> move = brain.findBestMove(board, 1);
-    play_move(move.first, move.second);
-}
+// void GomokuAI::makeWellThoughtMove() {
+//     std::pair<int, int> move = brain.findBestMove(board, 1);
+//     play_move(move.first, move.second);
+// }
 
 void GomokuAI::registerMoveOnBoard(int x, int y, int player) {
     board[x][y] = player;
